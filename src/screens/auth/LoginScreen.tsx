@@ -31,7 +31,7 @@ export function LoginScreen() {
   const onSubmit = (_values: LoginFormValues) => undefined;
 
   return (
-    <Screen>
+    <Screen background={require('../../assets/brand/d-bg.jpg')}>
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
