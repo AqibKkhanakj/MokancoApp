@@ -34,15 +34,15 @@ export function FormField<T extends FieldValues>({
       render={({ field: { onBlur, onChange, value }, fieldState: { error } }) => (
         <View>
           <View
-            className={`h-11 flex-row items-center rounded-2xl bg-surface px-3 ${
-              error ? 'border border-danger' : ''
+            className={`h-11 flex-row items-center border-b ${
+              error ? 'border-danger' : 'border-canvas'
             }`}
           >
             {icon}
             <TextInput
-              className="ml-2 h-full flex-1 text-sm text-ink"
+              className="ml-2 h-full flex-1 text-sm text-canvas"
               placeholder={placeholder}
-              placeholderTextColor={colors.muted}
+              placeholderTextColor={colors.canvas}
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}

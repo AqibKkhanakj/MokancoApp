@@ -39,13 +39,13 @@ export function LoginScreen() {
         <View className="flex-1 justify-between px-6 py-4">
           <View className="mt-8 items-center">
             <BrandLogo className="h-10 w-48" />
-            <Text className="mt-1 text-center text-[11px] font-medium tracking-[1px] text-gold">
-              Yamani Special Coffee
+            <Text className="mt-1 text-center text-[11px] font-medium tracking-[1px] text-ink">
+              Yamani Speciality Coffee
             </Text>
-            <Text className="mt-4 text-center text-2xl font-semibold text-ink">
+            <Text className="mt-4 text-center text-2xl font-semibold text-canvas">
               Welcome
             </Text>
-            <Text className="mt-1 text-center text-sm leading-5 text-muted">
+            <Text className="mt-1 text-center text-sm leading-5 text-canvas">
               Sign in to your Moka & Co{'\n'}partner account.
             </Text>
           </View>
@@ -61,7 +61,7 @@ export function LoginScreen() {
                 autoCorrect={false}
                 keyboardType="email-address"
                 textContentType="emailAddress"
-                icon={<Mail color={colors.muted} size={18} strokeWidth={1.75} />}
+                icon={<Mail color={colors.canvas} size={18} strokeWidth={1.75} />}
               />
               <FormField
                 control={control}
@@ -72,7 +72,7 @@ export function LoginScreen() {
                 autoCorrect={false}
                 secureTextEntry={!passwordVisible}
                 textContentType="password"
-                icon={<Lock color={colors.muted} size={18} strokeWidth={1.75} />}
+                icon={<Lock color={colors.canvas} size={18} strokeWidth={1.75} />}
                 trailing={
                   <Pressable
                     accessibilityRole="button"
@@ -81,16 +81,16 @@ export function LoginScreen() {
                     onPress={() => setPasswordVisible(current => !current)}
                   >
                     {passwordVisible ? (
-                      <EyeOff color={colors.muted} size={18} strokeWidth={1.75} />
+                      <EyeOff color={colors.canvas} size={18} strokeWidth={1.75} />
                     ) : (
-                      <Eye color={colors.muted} size={18} strokeWidth={1.75} />
+                      <Eye color={colors.canvas} size={18} strokeWidth={1.75} />
                     )}
                   </Pressable>
                 }
               />
             </View>
 
-            <View className="mt-3 flex-row items-center justify-between">
+            <View className="mt-3 flex-row items-center">
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: remember }}
@@ -99,17 +99,14 @@ export function LoginScreen() {
             >
               <View
                 className={`h-5 w-5 items-center justify-center rounded-md ${
-                  remember ? 'bg-gold' : 'border border-line bg-surface'
+                  remember ? 'bg-canvas' : 'border border-canvas bg-surface'
                 }`}
               >
                 {remember ? (
-                  <Check color="#FFFFFF" size={14} strokeWidth={3} />
+                  <Check color={colors.ink} size={14} strokeWidth={3} />
                 ) : null}
               </View>
-              <Text className="text-xs text-ink">Remember me</Text>
-            </Pressable>
-            <Pressable accessibilityRole="button" onPress={() => undefined}>
-              <Text className="text-xs font-medium text-gold">Forgot password?</Text>
+              <Text className="text-xs text-canvas">Remember me</Text>
             </Pressable>
           </View>
 
@@ -130,23 +127,23 @@ export function LoginScreen() {
 
           <View className="mb-8">
             <View className="flex-row items-center gap-3">
-              <View className="h-px flex-1 bg-line" />
-              <Text className="text-xs text-muted">or sign in with</Text>
-              <View className="h-px flex-1 bg-line" />
+              <View className="h-px flex-1 bg-canvas" />
+              <Text className="text-xs text-canvas">or sign in with</Text>
+              <View className="h-px flex-1 bg-canvas" />
             </View>
 
             <View className="mt-3 flex-row justify-center gap-8">
               <Pressable accessibilityRole="button" className="items-center" onPress={() => undefined}>
-                <View className="h-11 w-14 items-center justify-center rounded-2xl bg-surface">
-                  <ScanFace color={colors.ink} size={22} strokeWidth={1.75} />
+                <View className="h-11 w-14 items-center justify-center rounded-2xl border border-canvas">
+                  <ScanFace color={colors.canvas} size={22} strokeWidth={1.75} />
                 </View>
-                <Text className="mt-1 text-xs text-ink">Face ID</Text>
+                <Text className="mt-1 text-xs text-canvas">Face ID</Text>
               </Pressable>
               <Pressable accessibilityRole="button" className="items-center" onPress={() => undefined}>
-                <View className="h-11 w-14 items-center justify-center rounded-2xl bg-surface">
-                  <Fingerprint color={colors.ink} size={22} strokeWidth={1.75} />
+                <View className="h-11 w-14 items-center justify-center rounded-2xl border border-canvas">
+                  <Fingerprint color={colors.canvas} size={22} strokeWidth={1.75} />
                 </View>
-                <Text className="mt-1 text-xs text-ink">Fingerprint</Text>
+                <Text className="mt-1 text-xs text-canvas">Fingerprint</Text>
               </Pressable>
             </View>
           </View>
