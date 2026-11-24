@@ -10,7 +10,7 @@ test('renders the login screen', async () => {
     ReactTestRenderer.create(
       <SafeAreaProvider>
         <PaperProvider theme={paperTheme}>
-          <LoginScreen />
+          <LoginScreen navigation={{ replace: () => undefined } as never} route={{} as never} />
         </PaperProvider>
       </SafeAreaProvider>,
     );

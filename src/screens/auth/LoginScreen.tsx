@@ -10,14 +10,18 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Eye, EyeOff, Fingerprint, Lock, Mail, ScanFace } from 'lucide-react-native';
 import { useForm } from 'react-hook-form';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'react-native-paper';
 import { BrandLogo } from '../../components/BrandLogo';
 import { FormField } from '../../components/FormField';
 import { Screen } from '../../components/Screen';
+import type { RootStackParamList } from '../../navigation/types';
 import { colors } from '../../theme/palette';
 import { loginSchema, type LoginFormValues } from './loginSchema';
 
-export function LoginScreen() {
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+export function LoginScreen({ navigation }: LoginScreenProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(true);
   const { control, handleSubmit, formState } = useForm<LoginFormValues>({
@@ -28,7 +32,9 @@ export function LoginScreen() {
     },
   });
 
-  const onSubmit = (_values: LoginFormValues) => undefined;
+  const onSubmit = (_values: LoginFormValues) => {
+    navigation.replace('Home');
+  };
 
   return (
     <Screen background={require('../../assets/brand/d-bg.jpg')}>
