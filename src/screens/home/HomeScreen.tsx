@@ -1,6 +1,5 @@
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   ArrowRight,
   Bell,
@@ -14,9 +13,9 @@ import {
   Store,
   Truck,
 } from 'lucide-react-native';
+import { CreateTicketModal } from '../../components/CreateTicketModal';
 import { FooterMenu } from '../../components/FooterMenu';
 import { Screen } from '../../components/Screen';
-import type { RootStackParamList } from '../../navigation/types';
 import { colors } from '../../theme/palette';
 
 const quickTickets = [
@@ -62,14 +61,8 @@ const quickTickets = [
   },
 ] as const;
 
-type HomeNavigation = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-
 export function HomeScreen() {
-  const navigation = useNavigation<HomeNavigation>();
-
-  const openTicket = (title: string, detail: string) => {
-    navigation.navigate('Ticket', { title, detail });
-  };
+  const [ticketCategory, setTicketCategory] = useState<string | null>(null);
 
   return (
     <Screen>
@@ -113,12 +106,7 @@ export function HomeScreen() {
               <Pressable
                 accessibilityRole="button"
                 className="flex-row items-center gap-1 rounded-xl bg-gold px-4 py-2.5"
-                onPress={() =>
-                  openTicket(
-                    'Create ticket',
-                    'Open a blank form to describe your request in your own words.',
-                  )
-                }
+                onPress={() => setTicketCategory('General')}
               >
                 <Text className="text-sm font-semibold text-surface">New ticket</Text>
                 <ArrowRight color={colors.surface} size={16} strokeWidth={2} />
@@ -140,7 +128,7 @@ export function HomeScreen() {
                 accessibilityRole="button"
                 className="mt-3 rounded-2xl bg-surface p-4"
                 style={styles.card}
-                onPress={() => openTicket(ticket.title, ticket.detail)}
+                onPress={() => setTicketCategory(ticket.title)}
               >
                 <View className="flex-row items-center gap-3">
                   <View className="h-10 w-10 items-center justify-center rounded-full bg-canvas">
@@ -158,6 +146,11 @@ export function HomeScreen() {
           })}
         </ScrollView>
         <FooterMenu current="Home" />
+        <CreateTicketModal
+          visible={ticketCategory !== null}
+          category={ticketCategory ?? 'General'}
+          onClose={() => setTicketCategory(null)}
+        />
       </View>
     </Screen>
   );
