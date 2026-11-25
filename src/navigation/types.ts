@@ -1,10 +1,11 @@
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
-  Orders: undefined;
-  Products: undefined;
-  Account: undefined;
+  Tickets: undefined;
+  Accounts: undefined;
+  Documents: undefined;
+  MarketingAssets: undefined;
   Ticket: { title: string; detail: string };
 };
 
-export type MenuTab = 'Home' | 'Orders' | 'Products' | 'Account';
+export type MenuTab = 'Home' | 'Tickets' | 'Accounts' | 'Documents' | 'MarketingAssets';

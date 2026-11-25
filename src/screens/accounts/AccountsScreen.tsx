@@ -4,11 +4,11 @@ import { Button } from 'react-native-paper';
 import { PartnerScreen } from '../../components/PartnerScreen';
 import type { RootStackParamList } from '../../navigation/types';
 
-type AccountScreenProps = NativeStackScreenProps<RootStackParamList, 'Account'>;
+type AccountsScreenProps = NativeStackScreenProps<RootStackParamList, 'Accounts'>;
 
-export function AccountScreen({ navigation }: AccountScreenProps) {
+export function AccountsScreen({ navigation }: AccountsScreenProps) {
   return (
-    <PartnerScreen title="Account" tab="Account">
+    <PartnerScreen title="Accounts" tab="Accounts">
       <Button
         mode="contained"
         style={styles.signOut}
