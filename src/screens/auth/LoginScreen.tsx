@@ -7,7 +7,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Eye, EyeOff, Fingerprint, Lock, Mail, ScanFace } from 'lucide-react-native';
 import { useForm } from 'react-hook-form';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -17,24 +16,19 @@ import { FormField } from '../../components/FormField';
 import { Screen } from '../../components/Screen';
 import type { RootStackParamList } from '../../navigation/types';
 import { colors } from '../../theme/palette';
-import { loginSchema, type LoginFormValues } from './loginSchema';
+import type { LoginFormValues } from './loginSchema';
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [remember, setRemember] = useState(true);
-  const { control, handleSubmit, formState } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const { control } = useForm<LoginFormValues>({
     defaultValues: {
       email: '',
       password: '',
     },
   });
-
-  const onSubmit = (_values: LoginFormValues) => {
-    navigation.replace('Home');
-  };
 
   return (
     <Screen background={require('../../assets/brand/d-bg.jpg')}>
@@ -121,11 +115,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
             style={styles.signIn}
             contentStyle={styles.signInContent}
             labelStyle={styles.signInLabel}
-            loading={formState.isSubmitting}
-            disabled={formState.isSubmitting}
-            onPress={() => {
-              handleSubmit(onSubmit)();
-            }}
+            onPress={() => navigation.replace('Home')}
           >
             Sign in
           </Button>

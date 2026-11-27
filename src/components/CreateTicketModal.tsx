@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -19,7 +20,11 @@ type CreateTicketModalProps = {
   onClose: () => void;
 };
 
-export function CreateTicketModal({ visible, category, onClose }: CreateTicketModalProps) {
+export function CreateTicketModal({
+  visible,
+  category,
+  onClose,
+}: CreateTicketModalProps) {
   const [categoryValue, setCategoryValue] = useState(category);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -39,55 +44,105 @@ export function CreateTicketModal({ visible, category, onClose }: CreateTicketMo
       setError('Fill in category, title, and description.');
       return;
     }
+
     onClose();
   };
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <View className="flex-1 justify-center px-5" style={styles.backdrop}>
-          <Pressable accessibilityLabel="Close create ticket" className="absolute inset-0" onPress={onClose} />
-          <View className="rounded-3xl bg-surface px-5 py-5" style={styles.sheet}>
-            <View className="flex-row items-start justify-between">
-              <Text className="flex-1 text-xl font-semibold text-ink">Create ticket</Text>
-              <Pressable accessibilityRole="button" accessibilityLabel="Close" hitSlop={8} onPress={onClose}>
-                <X color={colors.line} size={20} strokeWidth={1.75} />
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      statusBarTranslucent
+      onRequestClose={onClose}
+    >
+      <View style={styles.backdrop}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Close create ticket"
+        />
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardContainer}
+        >
+          <View style={styles.modalCard}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.heading}>Create ticket</Text>
+                <Text style={styles.subtitle}>
+                  Submit a new request to the ticket queue.
+                </Text>
+              </View>
+
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close"
+                hitSlop={10}
+                onPress={onClose}
+                style={styles.closeButton}
+              >
+                <X color={colors.ink} size={20} strokeWidth={1.8} />
               </Pressable>
             </View>
-            <Text className="mt-1 text-sm leading-5 text-line">
-              Submit a new request to the ticket queue.
-            </Text>
 
-            <ScrollView className="mt-5" keyboardShouldPersistTaps="handled" bounces={false}>
-              <Field label="Category" value={categoryValue} onChangeText={setCategoryValue} />
-              <Field label="Title" value={title} onChangeText={setTitle} />
+            {/* Form */}
+            <ScrollView
+              style={styles.form}
+              contentContainerStyle={styles.formContent}
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+            >
+              <Field
+                label="Category"
+                value={categoryValue}
+                onChangeText={setCategoryValue}
+              />
+
+              <Field
+                label="Title"
+                value={title}
+                onChangeText={setTitle}
+                placeholder="Enter ticket title"
+              />
+
               <Field
                 label="Description"
                 value={description}
                 onChangeText={setDescription}
+                placeholder="Describe your issue or request..."
                 multiline
               />
-              {error ? <Text className="mt-3 text-xs text-danger">{error}</Text> : null}
+
+              {error ? (
+                <Text style={styles.error}>{error}</Text>
+              ) : null}
             </ScrollView>
 
-            <View className="mt-5 flex-row items-center justify-end gap-3">
-              <Pressable accessibilityRole="button" className="px-3 py-2" onPress={onClose}>
-                <Text className="text-sm font-medium text-ink">Cancel</Text>
-              </Pressable>
+            {/* Footer */}
+            <View style={styles.footer}>
               <Pressable
                 accessibilityRole="button"
-                className="rounded-xl bg-gold px-4 py-2.5"
-                onPress={submit}
+                onPress={onClose}
+                style={styles.cancelButton}
               >
-                <Text className="text-sm font-semibold text-surface">Create ticket</Text>
+                <Text style={styles.cancelText}>Cancel</Text>
+              </Pressable>
+
+              <Pressable
+                accessibilityRole="button"
+                onPress={submit}
+                style={styles.submitButton}
+              >
+                <Text style={styles.submitText}>Create ticket</Text>
               </Pressable>
             </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }
@@ -96,24 +151,33 @@ function Field({
   label,
   value,
   onChangeText,
+  placeholder,
   multiline = false,
 }: {
   label: string;
   value: string;
   onChangeText: (value: string) => void;
+  placeholder?: string;
   multiline?: boolean;
 }) {
   return (
-    <View className="mb-4">
-      <Text className="text-sm text-ink">
-        {label} <Text className="text-danger">*</Text>
+    <View style={styles.field}>
+      <Text style={styles.label}>
+        {label} <Text style={styles.required}>*</Text>
       </Text>
+
       <TextInput
-        className={`border-b border-line text-sm text-ink ${multiline ? 'min-h-24 py-2' : 'h-10'}`}
+        style={[
+          styles.input,
+          multiline && styles.multilineInput,
+        ]}
         value={value}
         onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor="#A19B92"
         multiline={multiline}
         textAlignVertical={multiline ? 'top' : 'center'}
+        autoCapitalize="sentences"
       />
     </View>
   );
@@ -121,9 +185,148 @@ function Field({
 
 const styles = StyleSheet.create({
   backdrop: {
-    backgroundColor: 'rgba(46, 46, 42, 0.45)',
+    flex: 1,
+    backgroundColor: 'rgba(25, 23, 20, 0.62)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 24,
   },
-  sheet: {
-    maxHeight: '86%',
+
+  keyboardContainer: {
+    width: '100%',
+    maxWidth: 480,
+    maxHeight: '100%',
+    justifyContent: 'center',
+  },
+
+  modalCard: {
+    width: '100%',
+    maxHeight: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    overflow: 'hidden',
+    elevation: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 20,
+  },
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingHorizontal: 22,
+    paddingTop: 22,
+    paddingBottom: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0EDE8',
+  },
+
+  heading: {
+    fontSize: 21,
+    fontWeight: '700',
+    color: colors.ink,
+  },
+
+  subtitle: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: '#77736D',
+    marginTop: 5,
+  },
+
+  closeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F6F5F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 12,
+  },
+
+  form: {
+    flexShrink: 1,
+  },
+
+  formContent: {
+    paddingHorizontal: 22,
+    paddingTop: 22,
+    paddingBottom: 10,
+  },
+
+  field: {
+    marginBottom: 22,
+  },
+
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.ink,
+    marginBottom: 9,
+  },
+
+  required: {
+    color: '#D94B42',
+  },
+
+  input: {
+    minHeight: 46,
+    borderWidth: 1,
+    borderColor: '#E8E4DE',
+    borderRadius: 11,
+    paddingHorizontal: 13,
+    fontSize: 14,
+    color: colors.ink,
+    backgroundColor: '#FFFFFF',
+  },
+
+  multilineInput: {
+    minHeight: 120,
+    paddingTop: 12,
+    paddingBottom: 12,
+  },
+
+  error: {
+    fontSize: 12,
+    color: '#D94B42',
+    marginBottom: 12,
+  },
+
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 22,
+    paddingVertical: 18,
+    borderTopWidth: 1,
+    borderTopColor: '#F0EDE8',
+    backgroundColor: '#FFFFFF',
+  },
+
+  cancelButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+
+  cancelText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.ink,
+  },
+
+  submitButton: {
+    backgroundColor: colors.gold,
+    borderRadius: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 13,
+  },
+
+  submitText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });
