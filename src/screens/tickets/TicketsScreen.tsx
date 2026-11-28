@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ArrowDown, ArrowUp, ChevronDown, Plus, Search } from 'lucide-react-native';
+import { AppButton } from '../../components/AppButton';
 import { CreateTicketModal } from '../../components/CreateTicketModal';
 import { FooterMenu } from '../../components/FooterMenu';
 import { Screen } from '../../components/Screen';
@@ -66,15 +67,18 @@ export function TicketsScreen() {
               </Text>
             </View>
           </View>
-          <Pressable
-            accessibilityRole="button"
-            className="mt-4 flex-row items-center self-end gap-1 rounded-xl bg-gold px-4 py-2.5"
+          <AppButton
+            title="New ticket"
             onPress={() => setCreating(true)}
-          >
-            <Plus color={colors.surface} size={16} strokeWidth={2} />
-            <Text className="text-sm font-semibold text-surface">New ticket</Text>
-          </Pressable>
-
+            icon={
+              <Plus
+                color={colors.canvas}
+                size={16}
+                strokeWidth={2}
+              />
+            }
+            className="mt-4 self-end"
+          />
           <View className="mt-4 rounded-2xl bg-surface p-3" style={styles.card}>
             <View className="flex-row items-center rounded-full border border-line px-3">
               <Search color={colors.line} size={16} strokeWidth={1.75} />

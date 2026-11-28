@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -8,11 +8,20 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
-import { X } from 'lucide-react-native';
+import { X, ArrowRight } from 'lucide-react-native';
+import { useForm } from 'react-hook-form';
+
 import { colors } from '../theme/palette';
+import { FormField } from './FormField';
+import { AppButton } from './AppButton';
+
+type TicketFormValues = {
+  category: string;
+  title: string;
+  description: string;
+};
 
 type CreateTicketModalProps = {
   visible: boolean;
@@ -25,26 +34,33 @@ export function CreateTicketModal({
   category,
   onClose,
 }: CreateTicketModalProps) {
-  const [categoryValue, setCategoryValue] = useState(category);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<TicketFormValues>({
+    defaultValues: {
+      category: 'General',
+      title: '',
+      description: '',
+    },
+  });
 
+  // Prefill category and reset fields whenever modal opens.
   useEffect(() => {
     if (visible) {
-      setCategoryValue(category);
-      setTitle('');
-      setDescription('');
-      setError('');
+      reset({
+        category,
+        title: '',
+        description: '',
+      });
     }
-  }, [visible, category]);
+  }, [visible, category, reset]);
 
-  const submit = () => {
-    if (!categoryValue.trim() || !title.trim() || !description.trim()) {
-      setError('Fill in category, title, and description.');
-      return;
-    }
+  const submit = (data: TicketFormValues) => {
+    console.log('Ticket data:', data);
 
+    // Add ticket API integration here.
     onClose();
   };
 
@@ -57,6 +73,7 @@ export function CreateTicketModal({
       onRequestClose={onClose}
     >
       <View style={styles.backdrop}>
+        {/* Outside press to close */}
         <Pressable
           style={StyleSheet.absoluteFill}
           onPress={onClose}
@@ -84,7 +101,11 @@ export function CreateTicketModal({
                 onPress={onClose}
                 style={styles.closeButton}
               >
-                <X color={colors.ink} size={20} strokeWidth={1.8} />
+                <X
+                  color={colors.ink}
+                  size={20}
+                  strokeWidth={1.75}
+                />
               </Pressable>
             </View>
 
@@ -96,30 +117,44 @@ export function CreateTicketModal({
               showsVerticalScrollIndicator={false}
               bounces={false}
             >
-              <Field
-                label="Category"
-                value={categoryValue}
-                onChangeText={setCategoryValue}
-              />
+              <View className="gap-5">
+                <FormField
+                  control={control}
+                  name="category"
+                  label="Category"
+                  placeholder="Category"
+                  required
+                  tone="dark"
+                  rules={{
+                    required: 'Category is required.',
+                  }}
+                />
 
-              <Field
-                label="Title"
-                value={title}
-                onChangeText={setTitle}
-                placeholder="Enter ticket title"
-              />
+                <FormField
+                  control={control}
+                  name="title"
+                  label="Title"
+                  placeholder="Enter ticket title"
+                  required
+                  tone="dark"
+                  rules={{
+                    required: 'Title is required.',
+                  }}
+                />
 
-              <Field
-                label="Description"
-                value={description}
-                onChangeText={setDescription}
-                placeholder="Describe your issue or request..."
-                multiline
-              />
-
-              {error ? (
-                <Text style={styles.error}>{error}</Text>
-              ) : null}
+                <FormField
+                  control={control}
+                  name="description"
+                  label="Description"
+                  placeholder="Describe your issue or request..."
+                  required
+                  tone="dark"
+                  multiline
+                  rules={{
+                    required: 'Description is required.',
+                  }}
+                />
+              </View>
             </ScrollView>
 
             {/* Footer */}
@@ -132,13 +167,17 @@ export function CreateTicketModal({
                 <Text style={styles.cancelText}>Cancel</Text>
               </Pressable>
 
-              <Pressable
-                accessibilityRole="button"
-                onPress={submit}
-                style={styles.submitButton}
-              >
-                <Text style={styles.submitText}>Create ticket</Text>
-              </Pressable>
+              <AppButton
+                title="Create ticket"
+                onPress={handleSubmit(submit)}
+                icon={
+                  <ArrowRight
+                    color={colors.canvas}
+                    size={16}
+                    strokeWidth={2}
+                  />
+                }
+              />
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -147,46 +186,10 @@ export function CreateTicketModal({
   );
 }
 
-function Field({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  multiline = false,
-}: {
-  label: string;
-  value: string;
-  onChangeText: (value: string) => void;
-  placeholder?: string;
-  multiline?: boolean;
-}) {
-  return (
-    <View style={styles.field}>
-      <Text style={styles.label}>
-        {label} <Text style={styles.required}>*</Text>
-      </Text>
-
-      <TextInput
-        style={[
-          styles.input,
-          multiline && styles.multilineInput,
-        ]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor="#A19B92"
-        multiline={multiline}
-        textAlignVertical={multiline ? 'top' : 'center'}
-        autoCapitalize="sentences"
-      />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(25, 23, 20, 0.62)',
+    backgroundColor: 'rgba(46, 46, 42, 0.58)',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     elevation: 15,
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.18,
     shadowRadius: 20,
@@ -253,45 +256,7 @@ const styles = StyleSheet.create({
   formContent: {
     paddingHorizontal: 22,
     paddingTop: 22,
-    paddingBottom: 10,
-  },
-
-  field: {
-    marginBottom: 22,
-  },
-
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.ink,
-    marginBottom: 9,
-  },
-
-  required: {
-    color: '#D94B42',
-  },
-
-  input: {
-    minHeight: 46,
-    borderWidth: 1,
-    borderColor: '#E8E4DE',
-    borderRadius: 11,
-    paddingHorizontal: 13,
-    fontSize: 14,
-    color: colors.ink,
-    backgroundColor: '#FFFFFF',
-  },
-
-  multilineInput: {
-    minHeight: 120,
-    paddingTop: 12,
-    paddingBottom: 12,
-  },
-
-  error: {
-    fontSize: 12,
-    color: '#D94B42',
-    marginBottom: 12,
+    paddingBottom: 24,
   },
 
   footer: {
@@ -301,8 +266,6 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 22,
     paddingVertical: 18,
-    borderTopWidth: 1,
-    borderTopColor: '#F0EDE8',
     backgroundColor: '#FFFFFF',
   },
 
@@ -315,18 +278,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: colors.ink,
-  },
-
-  submitButton: {
-    backgroundColor: colors.gold,
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 13,
-  },
-
-  submitText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFFFFF',
   },
 });
