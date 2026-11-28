@@ -1,31 +1,23 @@
-
 import { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-
-import {
-  ArrowRight,
-  Bell,
-  ChevronDown,
+  ChevronRight,
   ClipboardList,
   CreditCard,
+  FileText,
   Globe,
   Headset,
   Layers,
   Monitor,
+  Plus,
   Store,
   Truck,
 } from 'lucide-react-native';
-
 import { CreateTicketModal } from '../../components/CreateTicketModal';
+import { IconWell } from '../../components/IconWell';
 import { FooterMenu } from '../../components/FooterMenu';
 import { Screen } from '../../components/Screen';
-import { AppButton } from '../../components/AppButton';
+import { WorkspaceHeader } from '../../components/WorkspaceHeader';
 import { colors } from '../../theme/palette';
 
 const quickTickets = [
@@ -85,156 +77,70 @@ export function HomeScreen() {
   return (
     <Screen>
       <View className="flex-1">
+        <WorkspaceHeader />
         <ScrollView
           className="flex-1"
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
         >
-          {/* Workspace Header */}
-          <View className="flex-row items-center justify-between">
-            <View>
-              <Text className="text-sm font-semibold text-ink">
-                Workspace
-              </Text>
-              <Text className="text-xs text-line">
-                Test 1
-              </Text>
-            </View>
-
-            <View className="flex-row items-center gap-2">
-              <Bell
-                color={colors.ink}
-                size={18}
-                strokeWidth={1.75}
-              />
-
-              <View className="h-6 w-6 items-center justify-center rounded-full bg-gold">
-                <Text className="text-[11px] font-semibold leading-none text-surface">
-                  T
-                </Text>
-              </View>
-
-              <View>
-                <Text className="text-[11px] font-semibold leading-3 text-ink">
-                  Test1
-                </Text>
-                <Text className="text-[10px] leading-3 text-line">
-                  Partner
-                </Text>
-              </View>
-
-              <ChevronDown
-                color={colors.ink}
-                size={14}
-                strokeWidth={1.75}
-              />
-            </View>
-          </View>
-
-          {/* Page Heading */}
-          <Text className="mt-5 text-2xl font-semibold text-ink">
-            Ticket center
-          </Text>
-
+          <Text className="text-2xl font-semibold text-ink">Ticket center</Text>
           <Text className="mt-1 text-sm leading-5 text-line">
             Create a ticket or start from a quick template below.
           </Text>
 
-          {/* General Ticket */}
-          <View
-            className="mt-4 rounded-2xl p-4"
-            style={styles.started}
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Create a ticket"
+            className="mt-4 flex-row items-center rounded-2xl px-4 py-4"
+            style={styles.banner}
+            onPress={() => openTicket('General')}
           >
-            <Text className="text-[11px] font-semibold tracking-[1px] text-gold">
-              GET STARTED
-            </Text>
+            <View className="h-12 w-12 items-center justify-center">
+              <FileText color={colors.surface} size={30} strokeWidth={1.6} />
+              <View className="absolute bottom-0 right-0 h-5 w-5 items-center justify-center rounded-full" style={styles.plusBadge}>
+                <Plus color={colors.surface} size={12} strokeWidth={2.6} />
+              </View>
+            </View>
+            <View className="ml-3 flex-1">
+              <Text className="text-[11px] font-semibold tracking-[1px] text-canvas">GET STARTED</Text>
+              <Text className="mt-1 text-lg font-semibold text-surface">Create ticket</Text>
+              <Text className="mt-1 text-sm leading-5 text-canvas">
+                Open a blank form to describe your request in your own words. Submit your request without leaving this page.
+              </Text>
+            </View>
+            <View className="ml-3 h-10 w-10 items-center justify-center rounded-full bg-surface">
+              <Plus color={colors.gold} size={18} strokeWidth={2.2} />
+            </View>
+          </Pressable>
 
-            <Text className="mt-2 text-base font-semibold text-ink">
-              Create ticket
-            </Text>
-
-            <Text className="mt-1 text-sm leading-5 text-line">
-              Open a blank form to describe your request in your own words.
-              Submit your request without leaving this page.
-            </Text>
-
-            <AppButton
-              title="Create new ticket"
-              onPress={() => openTicket('General')}
-              className="mt-4 self-end"
-            />
-          </View>
-
-          {/* Quick Tickets Heading */}
-          <Text className="mt-6 text-base font-semibold text-ink">
-            Open quick ticket
-          </Text>
-
+          <Text className="mt-6 text-base font-semibold text-ink">Open quick ticket</Text>
           <Text className="mt-1 text-sm leading-5 text-line">
-            Choose a category and select Start ticket to open a prefilled
-            request form.
+            Choose a category and select Start ticket to open a prefilled request form.
           </Text>
 
-          {/* Quick Ticket Cards */}
-          <View className="mt-3 gap-3">
-            {quickTickets.map((ticket) => {
+          <View className="mt-3 flex-row flex-wrap justify-between">
+            {quickTickets.map(ticket => {
               const Icon = ticket.icon;
-
               return (
-                <View
+                <Pressable
                   key={ticket.title}
-                  className="rounded-2xl bg-surface p-4"
+                  accessibilityRole="button"
+                  accessibilityLabel={`Start ${ticket.title} ticket`}
+                  className="mb-3 flex-row items-center rounded-2xl bg-surface px-3 py-3"
                   style={styles.card}
+                  onPress={() => openTicket(ticket.title)}
                 >
-                  <View className="flex-row items-start gap-3">
-                    {/* Category Icon */}
-                    <View className="h-11 w-11 items-center justify-center rounded-xl bg-canvas">
-                      <Icon
-                        color={colors.ink}
-                        size={19}
-                        strokeWidth={1.75}
-                      />
-                    </View>
-
-                    {/* Category Details and Start Ticket */}
-                    <View className="flex-1">
-                      <Text className="text-base font-semibold text-ink">
-                        {ticket.title}
-                      </Text>
-
-                      <Text className="mt-1 text-sm leading-5 text-line">
-                        {ticket.detail}
-                      </Text>
-
-                      {/* Start Ticket - Aligned Under Text */}
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel={`Start ${ticket.title} ticket`}
-                        className="mt-3 flex-row items-center gap-1 self-start"
-                        onPress={() => openTicket(ticket.title)}
-                      >
-                        <Text className="text-sm font-semibold text-gold">
-                          Start ticket
-                        </Text>
-
-                        <ArrowRight
-                          color={colors.gold}
-                          size={15}
-                          strokeWidth={2}
-                        />
-                      </Pressable>
-                    </View>
-                  </View>
-                </View>
+                  <IconWell icon={Icon} />
+                  <Text className="mx-2 flex-1 text-sm font-semibold leading-5 text-ink" numberOfLines={2}>
+                    {ticket.title}
+                  </Text>
+                  <ChevronRight color={colors.line} size={16} strokeWidth={1.75} />
+                </Pressable>
               );
             })}
           </View>
         </ScrollView>
-
-        {/* Footer Navigation */}
         <FooterMenu current="Home" />
-
-        {/* Create Ticket Modal */}
         <CreateTicketModal
           visible={ticketCategory !== null}
           category={ticketCategory ?? 'General'}
@@ -248,27 +154,25 @@ export function HomeScreen() {
 const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingTop: 8,
     paddingBottom: 24,
   },
-
-  started: {
-    backgroundColor: '#F8F3EC',
-    borderWidth: 1,
-    borderColor: '#EDE2D4',
+  banner: {
+    backgroundColor: colors.gold,
   },
-
+  plusBadge: {
+    backgroundColor: colors.gold,
+    borderWidth: 1.5,
+    borderColor: colors.surface,
+  },
   card: {
-    backgroundColor: colors.surface,
+    width: '48.5%',
     borderWidth: 1,
     borderColor: '#EAE8E2',
     shadowColor: colors.ink,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowRadius: 6,
     elevation: 2,
   },
 });

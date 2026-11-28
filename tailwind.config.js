@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         canvas: colors.canvas,
         gold: colors.gold,
+        surface: colors.surface,
         ink: colors.ink,
         muted: colors.muted,
         primary: colors.primary,

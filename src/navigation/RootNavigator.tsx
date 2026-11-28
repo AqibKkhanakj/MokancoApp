@@ -5,6 +5,7 @@ import { DocumentsScreen } from '../screens/documents/DocumentsScreen';
 import { HomeScreen } from '../screens/home/HomeScreen';
 import { TicketScreen } from '../screens/home/TicketScreen';
 import { MarketingAssetsScreen } from '../screens/marketing/MarketingAssetsScreen';
+import { TicketDetailScreen } from '../screens/tickets/TicketDetailScreen';
 import { TicketsScreen } from '../screens/tickets/TicketsScreen';
 import type { RootStackParamList } from './types';
 
@@ -26,6 +27,7 @@ export function RootNavigator() {
         options={{ animation: 'fade' }}
       />
       <Stack.Screen name="Ticket" component={TicketScreen} />
+      <Stack.Screen name="TicketDetail" component={TicketDetailScreen} />
     </Stack.Navigator>
   );
 }

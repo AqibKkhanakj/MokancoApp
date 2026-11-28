@@ -172,7 +172,7 @@ export function CreateTicketModal({
                 onPress={handleSubmit(submit)}
                 icon={
                   <ArrowRight
-                    color={colors.canvas}
+                    color={colors.surface}
                     size={16}
                     strokeWidth={2}
                   />

@@ -1,7 +1,6 @@
 
 import { Pressable, Text, View } from 'react-native';
 import type { ReactNode } from 'react';
-import { colors } from '../theme/palette';
 
 type AppButtonProps = {
   title: string;
@@ -29,10 +28,7 @@ export function AppButton({
     >
       {icon ? <View>{icon}</View> : null}
 
-      <Text
-        style={{ color: colors.canvas }}
-        className="text-sm font-semibold"
-      >
+      <Text className="text-sm font-semibold text-surface">
         {title}
       </Text>
     </Pressable>

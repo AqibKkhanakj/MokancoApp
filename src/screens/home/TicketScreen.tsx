@@ -5,6 +5,7 @@ import { ChevronLeft } from 'lucide-react-native';
 import { Button } from 'react-native-paper';
 import { FooterMenu } from '../../components/FooterMenu';
 import { Screen } from '../../components/Screen';
+import { WorkspaceHeader } from '../../components/WorkspaceHeader';
 import type { RootStackParamList } from '../../navigation/types';
 import { colors } from '../../theme/palette';
 
@@ -17,6 +18,7 @@ export function TicketScreen({ navigation, route }: TicketScreenProps) {
   return (
     <Screen>
       <View className="flex-1">
+        <WorkspaceHeader />
         <ScrollView
           className="flex-1"
           contentContainerStyle={styles.content}

@@ -25,6 +25,7 @@ import {
 
 import { FooterMenu } from '../../components/FooterMenu';
 import { Screen } from '../../components/Screen';
+import { WorkspaceHeader } from '../../components/WorkspaceHeader';
 import { colors } from '../../theme/palette';
 
 type DocumentItem = {
@@ -120,6 +121,7 @@ export function DocumentsScreen() {
   return (
     <Screen>
       <View className="flex-1">
+        <WorkspaceHeader />
         <ScrollView
           className="flex-1"
           contentContainerStyle={styles.content}
